@@ -1,5 +1,6 @@
 import React from 'react'
 import axios from "axios"
+import toast, { Toaster } from 'react-hot-toast'
 
 function App() {
   const [loading, setLoading] = React.useState(false)
@@ -48,22 +49,24 @@ function App() {
   }
 
   const handleView = async (id) => {
-    // await axios.post(`http://192.168.100.68:4003/news/updateView/${id}`)
-    setInterval(() => {
+    toast.success('pending data')
+    await axios.post(`http://45.146.167.233:4003/news/updateView/${id}`)
+    setTimeout(() => {
       getData()
-      console.log('hi');
+      toast.success('fetch success')
     }, 2000);  
   }
 
   return (
       <div className="w-screen py-[100px] flex flex-col items-center justify-center bg-gradient-to-br from-[#6D90B9] to-[#BBC7DC]">
+        <Toaster />
       <form className="w-[400px] bg-white p-8 flex flex-col gap-4 mb-10" onSubmit={handleSubmit}>
         <input required className="w-full border-gray-400 border-2 px-3 py-2 outline-[#6D90B9]" type="text" name="title" placeholder="Title" />
         <input required className="w-full border-gray-400 border-2 px-3 py-2 outline-[#6D90B9]" type="text" name="description" placeholder="Description" />
         <input required className="w-full border-gray-400 border-2 px-3 py-2 outline-[#6D90B9]" type="text" name="sourceTitle" placeholder="sourceTitle" />
         <input required className="w-full border-gray-400 border-2 px-3 py-2 outline-[#6D90B9]" type="text" name="sourceLink" placeholder="sourceLink" />
         <input required onChange={selectImage} type="file" name="image" />
-        <button className="w-full bg-[#6D90B9] text-white py-2">SUBMIT</button>
+        <button className="w-full bg-blue-500 text-white py-2">SUBMIT</button>
       </form>
      <div className="container">
      <div className='flex flex-col gap-y-4 mx-auto'>
