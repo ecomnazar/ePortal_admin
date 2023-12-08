@@ -2,7 +2,7 @@ import React from 'react'
 import axios from "axios"
 import toast, { Toaster } from 'react-hot-toast'
 
-const API = "http://localhost:4003/api/v1"
+const API = "http://45.146.167.233:4003/api/v1"
 
 function App() {
   const [loading, setLoading] = React.useState(false)
@@ -150,7 +150,7 @@ function App() {
               <button onClick={() => handleView(elem._id)} className='text-white px-2 py-1 bg-red-300'>VIEW</button>
               <button onClick={() => handleDelete(elem._id)} className='text-white px-2 py-1 bg-blue-300'>DELETE</button>
               </div>
-            <img src={`http://localhost:4003/${elem.image}`} className="w-full" alt="" />
+            <img src={`http://45.146.167.233:4003/${elem.image}`} className="w-full" alt="" />
             <h2>View {elem.view}</h2>
             <h2>View {elem.image}</h2>
             <h1 className='font-bold'>{elem.title}</h1>
