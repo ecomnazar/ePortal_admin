@@ -2,7 +2,8 @@ import React from 'react'
 import axios from "axios"
 import toast, { Toaster } from 'react-hot-toast'
 
-const API = "http://45.146.167.233:4003/api/v1"
+const API = "https://repo.gozle.com.tm/eportalback/api/v1"
+// const API = "http://localhost:4003/api/v1"
 
 function App() {
   const [loading, setLoading] = React.useState(false)
@@ -15,6 +16,12 @@ function App() {
     setData(response.data.news)
   }
 
+  const getTrend = async () => {
+    const response = await axios.get(`${API}/news/trend`)
+    console.log(response.data);
+  }
+
+
   const getCategroies = async () => {
     const response = await axios.get(`${API}/categories`)
     setCategories(response.data)
@@ -23,6 +30,7 @@ function App() {
   React.useEffect(() => {
       getData()
       getCategroies()
+      getTrend()
   }, [])
 
   const handleSubmit = async (e) => {
@@ -47,8 +55,8 @@ function App() {
     formData.append('categoryName', categoryName.name)
 
     const data = formData
-
-    await axios.post(`${API}/news`, data, {
+    // await axios.post(`http://localhost:4003/api/v1/news`, data, {
+      await axios.post(`${API}/news`, data, {
       // await axios.post(`${API}/categories`, data, {
       headers: {
         // "Content-Type": 'application/json'
@@ -79,7 +87,7 @@ function App() {
 
   const handleView = async (id) => {
     toast.success('pending data')
-    await axios.post(`${API}/news/updateView/${id}`)
+    await axios.put(`${API}/news/updateView/${id}`)
     setTimeout(() => {
       getData()
       toast.success('fetch success')
@@ -100,7 +108,7 @@ function App() {
   const handleDelete = async (id) => {
     toast.success('pending data')
     await axios.delete(`${API}/news`, {
-      data: {id}
+      data: { id }
     })
     setTimeout(() => {
       getData()
@@ -112,9 +120,10 @@ function App() {
       <div className="w-screen py-[100px] flex flex-col items-center justify-center bg-gradient-to-br from-[#6D90B9] to-[#BBC7DC]">
         <Toaster />
       <div className='flex items-center gap-x-4'>
-      <form className="w-[400px] bg-white p-8 flex flex-col gap-4 mb-10" onSubmit={handleSubmit}>
+      <form className="w-[800px] bg-white p-8 flex flex-col gap-4 mb-10" onSubmit={handleSubmit}>
         <input required className="w-full border-gray-400 border-2 px-3 py-2 outline-[#6D90B9]" type="text" name="title" placeholder="Title" />
-        <input required className="w-full border-gray-400 border-2 px-3 py-2 outline-[#6D90B9]" type="text" name="description" placeholder="Description" />
+        {/* <input required className="w-full border-gray-400 border-2 px-3 py-2 outline-[#6D90B9]" type="text" name="description" placeholder="Description" /> */}
+        <textarea required className="w-full border-gray-400 border-2 px-3 py-2 outline-[#6D90B9]"  name="description"></textarea>
         <input required className="w-full border-gray-400 border-2 px-3 py-2 outline-[#6D90B9]" type="text" name="sourceTitle" placeholder="sourceTitle" />
         <input required className="w-full border-gray-400 border-2 px-3 py-2 outline-[#6D90B9]" type="text" name="sourceLink" placeholder="sourceLink" />
         <input required onChange={selectImage} type="file" name="image" />
@@ -150,9 +159,10 @@ function App() {
               <button onClick={() => handleView(elem._id)} className='text-white px-2 py-1 bg-red-300'>VIEW</button>
               <button onClick={() => handleDelete(elem._id)} className='text-white px-2 py-1 bg-blue-300'>DELETE</button>
               </div>
-            <img src={`http://45.146.167.233:4003/${elem.image}`} className="w-full" alt="" />
+            <img src={`http://repo.gozle.com.tm/eportalback/${elem.image}`} className="w-full" alt="" />
             <h2>View {elem.view}</h2>
-            <h2>View {elem.image}</h2>
+            <h2>Created at: {elem.created_at}</h2>
+            <h2>Read minute: {elem.read_time}</h2>
             <h1 className='font-bold'>{elem.title}</h1>
             <h1 className='font-bold'>Category: {elem.category_name}</h1>
             <p>{elem.description}</p>
